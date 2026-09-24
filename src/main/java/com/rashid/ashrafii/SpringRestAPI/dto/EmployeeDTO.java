@@ -16,21 +16,30 @@ import java.time.LocalDate;
 public class EmployeeDTO {
 
     private Long employeeId;
-    @NotEmpty(message = "Name can not be Empty")
-    @Size(min=3, max=20, message= "Employ name must have atleast 3 characters and atmost 20 characters")
+
+    @NotEmpty(message = "Name is a required field")
+    @Size(min=3, max=20, message= "Employee name should contain at least 3 characters and at most 20 characters")
     @NotNull
     private String name;
-    @NotEmpty(message = "Department is required")
+
+    @NotEmpty(message = "Department is required field")
     private String department;
+
+    @NotNull(message = "Salary is a required field")
     @Min(value=100,message="Salary can not be less than 100")
     @Max(value=199999, message="Salary can not be so large")
     private Double salary;
-    @PastOrPresent
+
+    @PastOrPresent(message = "Date can not be in future")
     private LocalDate dateOfJoining;
+
+    @NotNull(message = "isActive is a required field")
     private Boolean isActive;
-    @NotEmpty(message = "Role is required")
-    @EmployeeRoleValidation(message = "Role can be either USER or ADMIN")
+
+    @EmployeeRoleValidation(message = "Role can either be USER or ADMIN")
     private String role;
-    @Min(value=18, message = "Employe age should be greater than 18")
+
+    @NotNull(message = "Age is a required field")
+    @Min(value=18, message = "Employee age should be greater than 18")
     private int age;
 }

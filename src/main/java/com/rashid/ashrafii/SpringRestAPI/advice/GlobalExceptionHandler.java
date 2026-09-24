@@ -14,14 +14,26 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<APIError> HandleResourceNotFound(ResourceNotFoundException exception){
+    public ResponseEntity<APIResponse<?>> HandleResourceNotFound(ResourceNotFoundException exception){
         APIError apiError = APIError.builder().status(HttpStatus.NOT_FOUND).message(exception.getMessage()).build();
-        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(Exception.class )
+    public ResponseEntity<APIResponse<?>> internalServerError(Exception exception){
+
+        APIError apiError = APIError
+                .builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .message(exception.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<APIError> handleInputValidationError(MethodArgumentNotValidException exception){
+    public ResponseEntity<APIResponse<?>> handleInputValidationError(MethodArgumentNotValidException exception){
         List<@Nullable String> errors = exception
                 .getBindingResult()
                 .getAllErrors()
@@ -37,8 +49,8 @@ public class GlobalExceptionHandler {
         return buildErrorResponseEntity(apiError);
     }
 
-    private ResponseEntity<APIError> buildErrorResponseEntity(APIError apiError) {
-        return new ResponseEntity<>(apiError, apiError.getStatus());
+    private ResponseEntity<APIResponse<?>> buildErrorResponseEntity(APIError apiError) {
+        return new ResponseEntity<>(new APIResponse<>(apiError), apiError.getStatus());
     }
 
 
