@@ -1,6 +1,7 @@
 package com.rashid.ashrafii.SpringRestAPI.service;
 
 
+import com.rashid.ashrafii.SpringRestAPI.advice.ResourceNotFoundException;
 import com.rashid.ashrafii.SpringRestAPI.dto.EmployeeDTO;
 import com.rashid.ashrafii.SpringRestAPI.entity.EmployeeEntity;
 import com.rashid.ashrafii.SpringRestAPI.repositories.EmployeeRepository;
@@ -53,8 +54,8 @@ public class EmployeeService {
     }
 
     private void existsById(Long id) {
-        Boolean exist = employeeRepository.existsById(id);
-        if(!exist) throw new NoSuchElementException("Resource not found");
+        boolean exist = employeeRepository.existsById(id);
+        if(!exist) throw new ResourceNotFoundException("Employee not found with id: " + id);
     }
 
     public Boolean deleteEmployeeById(Long employeeId){

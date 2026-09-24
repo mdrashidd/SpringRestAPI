@@ -1,5 +1,6 @@
 package com.rashid.ashrafii.SpringRestAPI.controller;
 
+import com.rashid.ashrafii.SpringRestAPI.advice.ResourceNotFoundException;
 import com.rashid.ashrafii.SpringRestAPI.dto.EmployeeDTO;
 import com.rashid.ashrafii.SpringRestAPI.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ public class EmployeeController {
 
         return employeeDTO
                 .map(employeeDTO1 ->  ResponseEntity.ok(employeeDTO1))
-                .orElseThrow(()-> new NoSuchElementException("Resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Resource not found with id: " + employeeId));
     }
 
     @GetMapping
