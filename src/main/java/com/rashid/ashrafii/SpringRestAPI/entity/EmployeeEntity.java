@@ -22,4 +22,6 @@ public class EmployeeEntity {
     private Double salary;
     private LocalDate dateOfJoining;
     private Boolean isActive;
+    private String role;
+    private int age;
 }

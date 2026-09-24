@@ -2,6 +2,7 @@ package com.rashid.ashrafii.SpringRestAPI.controller;
 
 import com.rashid.ashrafii.SpringRestAPI.dto.EmployeeDTO;
 import com.rashid.ashrafii.SpringRestAPI.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class EmployeeController {
 
 
     @GetMapping("/{employeeId}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(name = "employeeId") Long employeeId) throws Exception {
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(name = "employeeId") @Valid Long employeeId) throws Exception {
         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
 
         return employeeDTO
@@ -37,21 +38,21 @@ public class EmployeeController {
 
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeedto){
+    public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody @Valid EmployeeDTO employeedto){
         EmployeeDTO employeeDTO =  employeeService.saveEmployee(employeedto);
         if(employeeDTO==null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
     }
 
     @PutMapping("/{employeeId}")
-    public ResponseEntity<EmployeeDTO> putEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeId){
+    public ResponseEntity<EmployeeDTO> putEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO, @PathVariable @Valid Long employeeId){
         employeeDTO = employeeService.putEmployeeById(employeeDTO,employeeId);
         if(employeeDTO==null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
     }
 
     @DeleteMapping(path="/{employeeId}")
-    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable Long employeeId){
+    public ResponseEntity<Boolean> deleteEmployeeById(@PathVariable @Valid Long employeeId){
         Boolean deleted = employeeService.deleteEmployeeById(employeeId);
         if(deleted) return ResponseEntity.ok(true);
         return ResponseEntity.notFound().build();
