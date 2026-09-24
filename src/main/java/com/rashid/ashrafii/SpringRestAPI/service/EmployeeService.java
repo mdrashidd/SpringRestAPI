@@ -7,9 +7,8 @@ import com.rashid.ashrafii.SpringRestAPI.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
 
 
 @Service
@@ -23,9 +22,11 @@ public class EmployeeService {
 
     }
 
-    public EmployeeDTO getEmployeeById(Long id){
-        EmployeeEntity employeeEntity = employeeRepository.findById(id).orElse(null);
-        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+    public Optional<EmployeeDTO> getEmployeeById(Long id){
+        return employeeRepository
+                .findById(id)
+                .map(employeeEntity -> modelMapper
+                        .map(employeeEntity, EmployeeDTO.class));
     }
 
 
@@ -46,18 +47,18 @@ public class EmployeeService {
     }
 
     public EmployeeDTO putEmployeeById(EmployeeDTO employeeDTO, Long id) {
-        Boolean exists = existsById(id);
+        existsById(id);
         employeeDTO.setEmployeeId(id);
         return saveEmployee(employeeDTO);
     }
 
-    private Boolean existsById(Long id) {
-        return employeeRepository.existsById(id);
+    private void existsById(Long id) {
+        Boolean exist = employeeRepository.existsById(id);
+        if(!exist) throw new NoSuchElementException("Resource not found");
     }
 
     public Boolean deleteEmployeeById(Long employeeId){
-        Boolean exists = existsById(employeeId);
-        if(!exists) return false;
+        existsById(employeeId);
         employeeRepository.deleteById(employeeId);
         return true;
     }
